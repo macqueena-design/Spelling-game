@@ -7,22 +7,75 @@
     <link rel="apple-touch-icon" href="Icon_rabbit.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <style>
-        body { 
-            font-family: 'Arial Rounded MT Bold', sans-serif; 
-            text-align: center; background-color: #F0F4FF; 
-            margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh;
-        }
-        #image-display { font-size: 200px; margin-bottom: 20px; cursor: pointer; }
-        #word-display { font-size: 110px; letter-spacing: 25px; color: #333; margin-bottom: 40px; text-transform: uppercase; }
-        .underline { border-bottom: 5px solid #FF6B6B; display: inline-block; width: 175px; height: 60px; }
-        .options { display: flex; gap: 20px; }
-        .btn { 
-            width: 80px; height: 80px; font-size: 40px; border: none; border-radius: 20px;
-            background: #4ECDC4; color: white; box-shadow: 0 8px #45b7af; cursor: pointer;
-        }
-        .btn:active { transform: translateY(4px); box-shadow: 0 4px #45b7af; }
-        .correct { background: #FFD93D !important; box-shadow: 0 8px #e6c237 !important; }
-    </style>
+    body { 
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; 
+        text-align: center; 
+        background-color: #F0F4FF; 
+        margin: 0; 
+        padding: 10px; /* 縮小邊距 */
+        display: flex; 
+        flex-direction: column; 
+        align-items: center; 
+        justify-content: space-around; /* 讓內容均勻分佈 */
+        height: 100vh; 
+        overflow: hidden; 
+        touch-action: manipulation;
+    }
+
+    #image-display { 
+        font-size: 20vh; /* 使用螢幕高度單位，確保在手機上不會太大 */
+        margin: 10px 0; 
+    }
+
+    #word-display { 
+        font-size: 10vw; /* 使用螢幕寬度單位，字體隨寬度縮放 */
+        letter-spacing: 5px; 
+        color: #333; 
+        margin-bottom: 20px; 
+        text-transform: uppercase;
+        word-wrap: break-word; /* 防止長單字超出螢幕 */
+        max-width: 95vw;
+    }
+
+    .underline { 
+        border-bottom: 4px solid #FF6B6B; 
+        display: inline-block; 
+        width: 1.2em; /* 隨字體大小縮放寬度 */
+        height: 1.1em; 
+        margin: 0 2px;
+        background-color: rgba(255,255,255,0.5);
+        border-radius: 5px;
+    }
+
+    .options { 
+        display: flex; 
+        gap: 15px; 
+        justify-content: center;
+        flex-wrap: wrap; /* 如果按鈕太多，自動換行 */
+        width: 100%;
+        max-width: 400px;
+    }
+
+    .btn { 
+        width: 70px; /* 縮小按鈕以適應手機寬度 */
+        height: 70px; 
+        font-size: 30px; 
+        border: none; 
+        border-radius: 15px;
+        background: #4ECDC4; 
+        color: white; 
+        box-shadow: 0 5px #45b7af; 
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent; /* 移除手機點擊陰影 */
+    }
+
+    /* 針對 iPad 等大螢幕的微調 */
+    @media (min-width: 768px) {
+        #image-display { font-size: 150px; }
+        #word-display { font-size: 60px; }
+        .btn { width: 100px; height: 100px; font-size: 45px; }
+    }
+</style>
 </head>
 <body>
 
