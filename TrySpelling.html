@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Spelling Game</title>
+    <link rel="apple-touch-icon" href="https://img.icons8.com/clouds/256/abc.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <style>
+        body { 
+            font-family: 'Arial Rounded MT Bold', sans-serif; 
+            text-align: center; background-color: #F0F4FF; 
+            margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh;
+        }
+        #image-display { font-size: 200px; margin-bottom: 20px; cursor: pointer; }
+        #word-display { font-size: 200px; letter-spacing: 25px; color: #333; margin-bottom: 40px; text-transform: uppercase; }
+        .underline { border-bottom: 5px solid #FF6B6B; display: inline-block; width: 175px; height: 60px; }
+        .options { display: flex; gap: 20px; }
+        .btn { 
+            width: 80px; height: 80px; font-size: 40px; border: none; border-radius: 20px;
+            background: #4ECDC4; color: white; box-shadow: 0 8px #45b7af; cursor: pointer;
+        }
+        .btn:active { transform: translateY(4px); box-shadow: 0 4px #45b7af; }
+        .correct { background: #FFD93D !important; box-shadow: 0 8px #e6c237 !important; }
+    </style>
+</head>
+<body>
+
+    <div id="image-display" onclick="speakWord()">🍎</div>
+    <div id="word-display"></div>
+    <div class="options" id="options-container"></div>
+
+    <script>
+        const data = [
+            { word: 'APPLE', emoji: '🍎', missingIdx: 0 },
+            { word: 'CAT', emoji: '🐱', missingIdx: 0 },
+            { word: 'DOG', emoji: '🐶', missingIdx: 0 },
+            { word: 'FISH', emoji: '🐟', missingIdx: 0 },
+	   { word: 'PIZZA', emoji: '🍕', missingIdx: 0 },
+	   { word: 'BANANA', emoji: '🍌', missingIdx: 0 },
+	   { word: 'TOMATO', emoji: '🍅', missingIdx: 0 },
+	   { word: 'BOOK', emoji: '📔', missingIdx: 0 },
+	   { word: 'TREE', emoji: '🌳', missingIdx: 0 },
+	   { word: 'PIG', emoji: '🐷', missingIdx: 0 },
+	   { word: 'DOOR', emoji: '🚪', missingIdx: 0 },
+	   { word: 'SUN', emoji: '☀️', missingIdx: 0 },
+	   { word: 'EAR', emoji: '👂', missingIdx: 0 },
+	   { word: 'EGG', emoji: '🥚', missingIdx: 0 },
+	   { word: 'CORN', emoji: '🌽', missingIdx: 0 },
+	   { word: 'GRAPE', emoji: '🍇', missingIdx: 0 },
+	   { word: 'PEAR', emoji: '🍐', missingIdx: 0 },
+	   { word: 'KIWI', emoji: '🥝', missingIdx: 0 },
+	   { word: 'ORANGE', emoji: '🍊', missingIdx: 0 },
+	   { word: 'HAND', emoji: '🖐', missingIdx: 0 },
+	   { word: 'EYE', emoji: '👁', missingIdx: 0 },
+	   { word: 'BEE', emoji: '🐝', missingIdx: 0 },
+	   { word: 'MOON', emoji: '🌙', missingIdx: 0 },
+            { word: 'BALL', emoji: '⚽', missingIdx: 0 },
+            { word: 'CAR', emoji: '🚗', missingIdx: 0 },
+            { word: 'STAR', emoji: '⭐', missingIdx: 0 },
+            { word: 'CAKE', emoji: '🎂', missingIdx: 0 },
+            { word: 'FIRE', emoji: '🔥', missingIdx: 0 }
+        ];
+
+        let currentItem;
+
+        function speakWord() {
+            const msg = new SpeechSynthesisUtterance(currentItem.word);
+            msg.lang = 'en-US';
+            window.speechSynthesis.speak(msg);
+        }
+
+        function initGame() {
+            currentItem = data[Math.floor(Math.random() * data.length)];
+            const display = document.getElementById('word-display');
+            const options = document.getElementById('options-container');
+            
+            document.getElementById('image-display').innerText = currentItem.emoji;
+            speakWord();
+
+            // 顯示單字，挖空一個字母
+            let wordHTML = "";
+            for (let i = 0; i < currentItem.word.length; i++) {
+                if (i === currentItem.missingIdx) {
+                    wordHTML += `<span class="underline"> </span>`;
+                } else {
+                    wordHTML += currentItem.word[i];
+                }
+            }
+            display.innerHTML = wordHTML;
+
+            // 準備選項
+            const correctLetter = currentItem.word[currentItem.missingIdx];
+            let choices = [correctLetter];
+            while (choices.length < 3) {
+                let randomLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
+                if (!choices.includes(randomLetter)) choices.push(randomLetter);
+            }
+            choices.sort(() => Math.random() - 0.5);
+
+            options.innerHTML = "";
+            choices.forEach(letter => {
+                const btn = document.createElement('button');
+                btn.className = 'btn';
+                btn.innerText = letter;
+                btn.onclick = () => check(letter, btn);
+                options.appendChild(btn);
+            });
+        }
+
+        function check(letter, btn) {
+            const correctLetter = currentItem.word[currentItem.missingIdx];
+            if (letter === correctLetter) {
+                btn.classList.add('correct');
+                const display = document.getElementById('word-display');
+                display.innerText = currentItem.word; // 顯示完整單字
+                setTimeout(initGame, 3000);
+            } else {
+                btn.style.background = '#FF6B6B';
+                setTimeout(() => btn.style.background = '#4ECDC4', 500);
+            }
+        }
+
+        initGame();
+    </script>
+</body>
+</html>
