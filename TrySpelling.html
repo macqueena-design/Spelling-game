@@ -169,21 +169,23 @@ function check(letter, btn) {
     
     if (letter === correctLetter) {
         // --- 【答對了】 ---
-        // 1. 圖片變成愛心
-        document.getElementById('image-display').innerText = "❤️"; 
         
-        // 2. 按鈕變黃色
+        // 1. 讓按鈕變黃色並顯示完整單字
         btn.classList.add('correct');
-        
-        // 3. 顯示完整單字
         document.getElementById('word-display').innerText = currentItem.word;
-        
-        // 4. 鎖定所有按鈕，防止在延遲期間亂點
+
+        // 2. 鎖定所有按鈕，防止在兩秒內重複點擊
         const btns = document.querySelectorAll('.btn');
         btns.forEach(b => b.disabled = true);
+
+        // 3. 重點：把原本顯示圖片的地方換成「👍」
+        // 你也可以換成其他 Good 的圖案，例如 🌟 或 👏
+        document.getElementById('image-display').innerText = "👍"; 
         
-        // 5. 2秒後換下一題
-        setTimeout(initGame, 3000);
+        // 4. 設定兩秒後 (2000毫秒) 才執行 initGame 換題
+        setTimeout(() => {
+            initGame();
+        }, 2000);
 
     } else {
         // --- 【答錯了】 ---
@@ -200,6 +202,14 @@ function check(letter, btn) {
         }, 2000); 
     }
 }
+
+
+
+
+
+
+
+
 
 
 
